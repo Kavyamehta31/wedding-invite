@@ -1,6 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');
+
 require('dotenv').config();
 
 const app = express();
@@ -14,6 +16,16 @@ app.use(cors());
 app.use(express.json());
 
 /* =========================
+   FRONTEND HOSTING
+========================= */
+
+app.use(
+  express.static(
+    path.join(__dirname, 'client')
+  )
+);
+
+/* =========================
    DATABASE CONNECTION
 ========================= */
 
@@ -21,7 +33,9 @@ mongoose.connect(process.env.MONGO_URI)
 
 .then(() => {
 
-  console.log('✅ MongoDB Connected');
+  console.log(
+    '✅ MongoDB Connected'
+  );
 
 })
 
@@ -39,48 +53,52 @@ mongoose.connect(process.env.MONGO_URI)
    RSVP SCHEMA
 ========================= */
 
-const rsvpSchema = new mongoose.Schema({
+const rsvpSchema =
+  new mongoose.Schema({
 
-  name: {
+    name: {
 
-    type: String,
+      type: String,
 
-    required: true,
+      required: true,
 
-    trim: true
+      trim: true
 
-  },
+    },
 
-  guests: {
+    guests: {
 
-    type: Number,
+      type: Number,
 
-    required: true
+      required: true
 
-  },
+    },
 
-  message: {
+    message: {
 
-    type: String,
+      type: String,
 
-    trim: true,
+      trim: true,
 
-    default: ''
+      default: ''
 
-  },
+    },
 
-  createdAt: {
+    createdAt: {
 
-    type: Date,
+      type: Date,
 
-    default: Date.now
+      default: Date.now
 
-  }
+    }
 
-});
+  });
 
 const RSVP =
-  mongoose.model('RSVP', rsvpSchema);
+  mongoose.model(
+    'RSVP',
+    rsvpSchema
+  );
 
 /* =========================
    HOME ROUTE
@@ -88,8 +106,12 @@ const RSVP =
 
 app.get('/', (req, res) => {
 
-  res.send(
-    'Wedding Invitation API Running'
+  res.sendFile(
+    path.join(
+      __dirname,
+      'client',
+      'index.html'
+    )
   );
 
 });
@@ -98,115 +120,119 @@ app.get('/', (req, res) => {
    SAVE RSVP
 ========================= */
 
-app.post('/rsvp', async (req, res) => {
+app.post('/rsvp',
+  async (req, res) => {
 
-  try {
+    try {
 
-    const {
-      name,
-      guests,
-      message
-    } = req.body;
+      const {
+        name,
+        guests,
+        message
+      } = req.body;
 
-    /* VALIDATION */
+      if (!name || !guests) {
 
-    if (!name || !guests) {
+        return res.status(400).json({
 
-      return res.status(400).json({
+          success: false,
 
-        success: false,
+          message:
+            'Please fill all required fields'
+
+        });
+
+      }
+
+      const newRSVP =
+        new RSVP({
+
+          name,
+          guests,
+          message
+
+        });
+
+      await newRSVP.save();
+
+      res.status(201).json({
+
+        success: true,
 
         message:
-          'Please fill all required fields'
+          'RSVP Saved Successfully'
 
       });
 
     }
 
-    /* SAVE TO DATABASE */
+    catch (error) {
 
-    const newRSVP = new RSVP({
+      console.log(error);
 
-      name,
-      guests,
-      message
+      res.status(500).json({
 
-    });
+        success: false,
 
-    await newRSVP.save();
+        message:
+          'Internal Server Error'
 
-    res.status(201).json({
+      });
 
-      success: true,
-
-      message:
-        'RSVP Saved Successfully'
-
-    });
+    }
 
   }
-
-  catch (error) {
-
-    console.log(error);
-
-    res.status(500).json({
-
-      success: false,
-
-      message:
-        'Internal Server Error'
-
-    });
-
-  }
-
-});
+);
 
 /* =========================
    GET ALL RSVPS
 ========================= */
 
-app.get('/rsvps', async (req, res) => {
+app.get('/rsvps',
+  async (req, res) => {
 
-  try {
+    try {
 
-    const allRSVPs =
-      await RSVP.find()
-      .sort({ createdAt: -1 });
+      const allRSVPs =
+        await RSVP.find()
+        .sort({
+          createdAt: -1
+        });
 
-    res.status(200).json({
+      res.status(200).json({
 
-      success: true,
+        success: true,
 
-      data: allRSVPs
+        data: allRSVPs
 
-    });
+      });
+
+    }
+
+    catch (error) {
+
+      console.log(error);
+
+      res.status(500).json({
+
+        success: false,
+
+        message:
+          'Failed to fetch RSVPs'
+
+      });
+
+    }
 
   }
-
-  catch (error) {
-
-    console.log(error);
-
-    res.status(500).json({
-
-      success: false,
-
-      message:
-        'Failed to fetch RSVPs'
-
-    });
-
-  }
-
-});
+);
 
 /* =========================
    DELETE RSVP
 ========================= */
 
 app.delete('/rsvp/:id',
+
   async (req, res) => {
 
     try {
@@ -257,4 +283,4 @@ app.listen(PORT, () => {
     `🚀 Server running on port ${PORT}`
   );
 
-});
+}); 
