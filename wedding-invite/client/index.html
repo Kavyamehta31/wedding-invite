@@ -1,0 +1,844 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    Prisha & Ankit | Royal Wedding
+  </title>
+
+  <!-- GOOGLE FONTS -->
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;500;600;700&family=Cormorant+Garamond:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- AOS -->
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/aos@2.3.1/dist/aos.css"
+  >
+
+  <!-- CSS -->
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+
+</head>
+
+<body>
+
+  <!-- =========================================================
+       MUSIC
+  ========================================================== -->
+
+  <audio
+    id="bgMusic"
+    loop
+  >
+
+    <source
+      src="assets/music/jashn-e-bahaara.mp3"
+      type="audio/mp3"
+    >
+
+  </audio>
+
+  <!-- =========================================================
+       MUSIC BUTTON
+  ========================================================== -->
+
+  <button
+    class="music-btn"
+    id="musicBtn"
+  >
+    ♫
+  </button>
+
+  <!-- =========================================================
+       ENVELOPE SCREEN
+  ========================================================== -->
+
+  <section
+    class="envelope-screen"
+    id="envelopeScreen"
+  >
+
+    <div class="sparkles"></div>
+
+    <div class="envelope-wrapper">
+
+      <p class="invite-text">
+        Together With Their Families
+      </p>
+
+      <div
+        class="envelope"
+        id="envelope"
+      >
+
+        <div class="env-back"></div>
+
+        <div class="env-flap"></div>
+
+        <div class="env-card">
+
+          <div class="seal"></div>
+
+          <h2>
+            P & A
+          </h2>
+
+          
+
+        </div>
+
+      </div>
+
+      <h3 class="open-text">
+        Tap To Open Invitation
+      </h3>
+
+    </div>
+
+  </section>
+
+  <!-- =========================================================
+       MAIN CONTENT
+  ========================================================== -->
+
+  <main
+    class="main-content"
+    id="mainContent"
+  >
+
+    <!-- =========================================================
+         NAVBAR
+    ========================================================== -->
+
+    <nav class="navbar">
+
+      <div class="logo">
+        P & A
+      </div>
+
+      <div class="nav-links">
+
+        <a href="#story">
+          Date
+        </a>
+
+        <a href="#events">
+          Events
+        </a>
+
+        <a href="#venue">
+          Venue
+        </a>
+
+        <a href="#rsvp">
+          RSVP
+        </a>
+
+        <a href="#contact">
+          Contact
+        </a>
+
+      </div>
+
+    </nav>
+
+    <!-- =========================================================
+         HERO SECTION
+    ========================================================== -->
+
+    <section class="hero">
+
+      <div class="hero-overlay"></div>
+
+      <img
+        src="assets/icons/mandala.png"
+        class="hero-mandala"
+        alt="Mandala"
+      >
+
+      <div class="hero-content">
+
+        <p
+          class="mini-text"
+          data-aos="fade-up"
+        >
+          WE ARE GETTING MARRIED
+        </p>
+
+        <h1 data-aos="zoom-in">
+          Prisha
+        </h1>
+
+        <div class="and">
+          &
+        </div>
+
+        <h1 data-aos="zoom-in">
+          Ankit
+        </h1>
+
+        <div class="hero-line"></div>
+
+        <p class="hero-location">
+          JMD Resort • Mandu • Madhya Pradesh
+        </p>
+
+        <!-- HERO BUTTONS -->
+
+        <div class="hero-buttons">
+
+          
+
+          <a
+            href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Prisha's+Wedding&dates=20261208T070000/20261208T120000&details=Join+us+for+Prisha+and+Ankit's+Royal+Wedding+Celebration&location=JMD+Resort,+Mandu,+Madhya+Pradesh"
+            target="_blank"
+            class="reminder-btn"
+          >
+
+            Set Reminder
+
+          </a>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- =========================================================
+         SCRATCH DATE SECTION
+    ========================================================== -->
+
+    <section
+      class="scratch-section"
+      id="story"
+    >
+
+      <div class="section-top">
+
+        <p class="section-tag">
+          Reveal The Wedding Date
+        </p>
+
+        <h2 class="section-title">
+          Scratch To Reveal
+        </h2>
+
+      </div>
+
+      <div class="scratch-card">
+
+        <div
+          class="scratch-overlay"
+          id="scratchOverlay"
+        >
+          Scratch Here
+        </div>
+
+        <div class="scratch-content">
+
+          <h2>
+            8 & 9 December 2026
+          </h2>
+
+          <p>
+            JMD Resort • Mandu • Madhya Pradesh
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- =========================================================
+         INVITATION LETTER
+    ========================================================== -->
+
+    <section class="letter-section">
+
+      <div class="letter-envelope">
+
+        <div class="letter-card">
+
+          <h2>
+            Dear Friends & Family,
+          </h2>
+
+          <p>
+            With immense joy in our hearts,
+            we invite you to celebrate the
+            beginning of our forever.
+          </p>
+
+          <p>
+            Your love, blessings and presence
+            will make our wedding celebrations
+            truly unforgettable.
+          </p>
+
+          <p>
+            Join us as we begin this beautiful
+            journey of love, laughter and togetherness.
+          </p>
+
+          <h3>
+            Prisha & Ankit
+          </h3>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- =========================================================
+         EVENTS SECTION
+    ========================================================== -->
+
+    <section
+      class="events-section"
+      id="events"
+    >
+
+      <div class="section-top">
+
+        <p class="section-tag">
+          Wedding Timeline
+        </p>
+
+        <h2 class="section-title">
+          Schedule Of Events
+        </h2>
+
+      </div>
+
+      <!-- DAY 1 -->
+
+      <div class="event-day-block">
+
+        <h3 class="event-day-title">
+          8 December 2026
+        </h3>
+
+        <div class="royal-timeline">
+
+          <div class="royal-event left">
+
+            <div class="event-card pop-card">
+
+              <h2>8:00 AM</h2>
+
+              <h4>Ganesh Pujan & Chaak Ceremony</h4>
+
+              <p>
+                Beginning the sacred celebrations
+                with divine blessings.
+              </p>
+
+            </div>
+
+          </div>
+
+          <div class="royal-event right">
+
+            <div class="event-card pop-card">
+
+              <h2>10:00 AM</h2>
+
+              <h4>Sagai</h4>
+
+              <p>
+                Ring ceremony with royal traditions.
+              </p>
+
+            </div>
+
+          </div>
+
+          <div class="royal-event left">
+
+            <div class="event-card pop-card">
+
+              <h2>12:00 PM</h2>
+
+              <h4>Mamera</h4>
+
+              <p>
+                The mama family welcomes the
+                celebrations with blessings and joy.
+              </p>
+
+            </div>
+
+          </div>
+
+          <div class="royal-event right">
+
+            <div class="event-card pop-card">
+
+              <h2>2:00 PM</h2>
+
+              <h4>Haldi Carnival</h4>
+
+              <p>
+                Colors, music and cheerful celebrations.
+              </p>
+
+            </div>
+
+          </div>
+
+          <div class="royal-event left">
+
+            <div class="event-card pop-card">
+
+              <h2>8:00 PM</h2>
+
+              <h4>Mahila Sangeet</h4>
+
+              <p>
+                Glamorous evening with dance
+                and musical performances.
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- WEDDING DAY DIVIDER -->
+
+      <div class="date-change-divider">
+
+        <span></span>
+
+        <h2>
+          Wedding Day
+        </h2>
+
+        <span></span>
+
+      </div>
+
+      <!-- DAY 2 -->
+
+      <div class="event-day-block">
+
+        <h3 class="event-day-title">
+          9 December 2026
+        </h3>
+
+        <div class="royal-timeline">
+
+          <div class="royal-event left">
+
+            <div class="event-card pop-card">
+
+              <h2>12:00 PM</h2>
+
+              <h4>Barat Swaagat</h4>
+
+              <p>
+                A grand celebration marking the
+                arrival of the groom and family.
+              </p>
+
+            </div>
+
+          </div>
+
+          <div class="royal-event right">
+
+            <div class="event-card pop-card">
+
+              <h2>1:30 PM</h2>
+
+              <h4>Mangal Pheras</h4>
+
+              <p>
+                Sacred vows before the holy fire
+                and eternal union.
+              </p>
+
+            </div>
+
+          </div>
+
+          <div class="royal-event left">
+
+            <div class="event-card pop-card">
+
+              <h2>7:00 PM</h2>
+
+              <h4>Reception</h4>
+
+              <p>
+                Elegant evening celebration
+                followed by dinner.
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+<!-- =========================================================
+     DRESS CODE GALLERY
+========================================================= -->
+
+<section class="dresscode-section">
+
+  <div class="section-top">
+
+    <p class="section-tag">
+      Wedding Aesthetics
+    </p>
+
+    
+
+    <p class="dress-text">
+      We would be delighted if your outfit
+      complements the royal wedding palette.
+    </p>
+
+  </div>
+
+  <div class="dress-slider">
+
+    <div class="dress-track">
+
+      <!-- 8 IMAGES -->
+
+      <div class="dress-slide">
+        <img src="assets/images/dress1.jpg" alt="">
+      </div>
+
+      <div class="dress-slide">
+        <img src="assets/images/dress2.jpg" alt="">
+      </div>
+
+      <div class="dress-slide">
+        <img src="assets/images/dress3.jpg" alt="">
+      </div>
+
+      <div class="dress-slide">
+        <img src="assets/images/dress4.jpg" alt="">
+      </div>
+
+      <div class="dress-slide">
+        <img src="assets/images/dress5.jpg" alt="">
+      </div>
+
+      <div class="dress-slide">
+        <img src="assets/images/dress6.jpg" alt="">
+      </div>
+
+      <div class="dress-slide">
+        <img src="assets/images/dress7.jpg" alt="">
+      </div>
+
+      <div class="dress-slide">
+        <img src="assets/images/dress8.jpg" alt="">
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- COLOR PALETTE -->
+
+  <div class="palette-wrapper">
+
+
+
+  </div>
+
+</section>
+    <!-- =========================================================
+         VENUE SECTION
+    ========================================================== -->
+
+    <section
+      class="venue-section"
+      id="venue"
+    >
+
+      <div class="section-top">
+
+        <p class="section-tag">
+          Wedding Destination
+        </p>
+
+        <h2 class="section-title">
+          Venue
+        </h2>
+
+      </div>
+
+      <div class="venue-card pop-card">
+
+        <img
+          src="assets/images/venue.jpg"
+          alt="Venue"
+          class="venue-image"
+        >
+
+        <div class="venue-content">
+
+          <h3>
+            JMD Resort
+          </h3>
+
+          <p>
+            Mandu • Madhya Pradesh
+          </p>
+
+          <a
+            href="https://maps.app.goo.gl/FrZ9whntt7oTJoyk6"
+            target="_blank"
+            class="venue-btn"
+          >
+
+            Open In Google Maps
+
+          </a>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- =========================================================
+         RSVP SECTION
+    ========================================================== -->
+
+    <section
+      class="rsvp-section"
+      id="rsvp"
+    >
+
+      <div class="rsvp-card pop-card">
+
+        <p class="section-tag">
+          Your Presence Matters
+        </p>
+
+        <h2 class="section-title">
+          RSVP
+        </h2>
+
+        <p class="rsvp-text">
+
+          Kindly confirm your gracious presence
+          and bless us with your love and wishes.
+
+        </p>
+
+        <button
+          class="hero-btn"
+          id="openRSVP"
+        >
+          Confirm Attendance
+        </button>
+
+      </div>
+
+    </section>
+
+    <!-- =========================================================
+         CONTACT SECTION
+    ========================================================== -->
+
+    <section
+      class="contact-section"
+      id="contact"
+    >
+
+      <div class="section-top">
+
+        <p class="section-tag">
+          Assistance & Coordination
+        </p>
+
+        <h2 class="section-title">
+          Contact
+        </h2>
+
+      </div>
+
+      <div class="contact-grid">
+
+        <a
+          href="https://wa.me/919425063550"
+          target="_blank"
+          class="contact-card pop-card"
+        >
+
+          <h3>
+            Nitin
+          </h3>
+
+          <p>
+            +91 94250 63550
+          </p>
+
+          <span>
+            WhatsApp Coordination
+          </span>
+
+        </a>
+
+        <a
+          href="https://wa.me/919425319655"
+          target="_blank"
+          class="contact-card pop-card"
+        >
+
+          <h3>
+            Shweta
+          </h3>
+
+          <p>
+            +91 94253 19655
+          </p>
+
+          <span>
+            WhatsApp Coordination
+          </span>
+
+        </a>
+
+      </div>
+
+    </section>
+
+    <!-- =========================================================
+         FOOTER
+    ========================================================== -->
+
+    <footer class="footer">
+
+      <h2>
+        We Cannot Wait To Celebrate With You
+      </h2>
+
+      <div class="divider"></div>
+
+      <p>
+        Chhajed & Kasera Family
+      </p>
+
+    </footer>
+
+  </main>
+
+  <!-- =========================================================
+     RSVP MODAL
+========================================================= -->
+
+<div
+  class="rsvp-modal"
+  id="rsvpModal"
+>
+
+  <div class="modal-box">
+
+    <button
+      class="close-btn"
+      id="closeRSVP"
+    >
+      ×
+    </button>
+
+    <p class="section-tag">
+      Wedding RSVP
+    </p>
+
+    <h2 class="modal-title">
+      Confirm Attendance
+    </h2>
+
+    <form id="rsvpForm">
+
+      <input
+        type="text"
+        id="guestName"
+        placeholder="Your Name"
+        required
+      >
+
+      <input
+        type="number"
+        id="guestCount"
+        placeholder="Number Of Guests"
+        required
+      >
+
+      <textarea
+        id="guestMessage"
+        placeholder="Blessings & Wishes"
+      ></textarea>
+
+      <button type="submit">
+        Submit RSVP
+      </button>
+
+      <!-- SUCCESS MESSAGE -->
+
+      <p id="rsvpSuccessMessage"></p>
+
+    </form>
+
+  </div>
+
+</div>
+
+  <!-- AOS -->
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+  <!-- JS -->
+
+  <script src="script.js"></script>
+
+</body>
+
+</html>

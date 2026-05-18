@@ -1,0 +1,46 @@
+<svg viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="heroGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#faf6f0;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#f5ecdf;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#eee0cc;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="ornament1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#f5dfa0;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#c9a84c;stop-opacity:0" />
+    </radialGradient>
+    <radialGradient id="ornament2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#7a94b4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#5d7394;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Main background -->
+  <rect width="1600" height="900" fill="url(#heroGrad)"/>
+  
+  <!-- Decorative circles -->
+  <circle cx="200" cy="150" r="180" fill="url(#ornament1)" opacity="0.3"/>
+  <circle cx="1400" cy="750" r="220" fill="url(#ornament2)" opacity="0.25"/>
+  <circle cx="800" cy="450" r="280" fill="url(#ornament1)" opacity="0.15"/>
+  
+  <!-- Decorative mandala-like patterns -->
+  <g opacity="0.2">
+    <circle cx="800" cy="450" r="400" fill="none" stroke="#c9a84c" stroke-width="2"/>
+    <circle cx="800" cy="450" r="380" fill="none" stroke="#c9a84c" stroke-width="1"/>
+    <circle cx="800" cy="450" r="360" fill="none" stroke="#5d7394" stroke-width="2" stroke-dasharray="10,5"/>
+  </g>
+  
+  <!-- Ornamental elements -->
+  <g opacity="0.4">
+    <polygon points="150,100 180,150 120,150" fill="#c9a84c"/>
+    <polygon points="1450,800 1480,850 1420,850" fill="#5d7394"/>
+  </g>
+  
+  <!-- Center text -->
+  <text x="800" y="450" font-size="64" fill="#6b5544" text-anchor="middle" font-family="Georgia, serif" opacity="0.3">
+    Wedding Background
+  </text>
+  <text x="800" y="520" font-size="28" fill="#c9a84c" text-anchor="middle" font-family="Georgia, serif" opacity="0.4">
+    Prisha & Ankit • 9 December 2026
+  </text>
+</svg>
