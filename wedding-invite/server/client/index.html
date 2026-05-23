@@ -6,31 +6,20 @@
   <meta charset="UTF-8">
 
   <!--
-    CHANGE 2 — DESKTOP-LIKE MOBILE RENDERING
-    ===========================================
-    Original tag was:
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    FIXED VIEWPORT META TAG
+    ========================
+    Old: width=980, initial-scale=1
+    → This forced mobile browsers to render at 980px wide
+      then scale down, making everything appear tiny/zoomed-out.
 
-    That told mobile browsers to use the phone's actual
-    narrow pixel width (e.g. 390px on iPhone 14), which
-    triggered the narrow responsive breakpoints and
-    made everything stack vertically.
-
-    New tag sets width=980. This forces the browser to
-    render the page as if the viewport is 980px wide —
-    exactly what Apple, NYT, and many luxury/editorial
-    sites use for "desktop-first" mobile rendering.
-    The browser then scales the 980px layout to fit the
-    screen, giving a zoomed-out desktop feel instead of
-    a narrow stacked mobile feel.
-
-    initial-scale=1 keeps it from auto-zooming weirdly.
-    user-scalable=yes allows pinch-to-zoom for usability.
+    New: width=device-width, initial-scale=1
+    → Uses the phone's actual screen width so media queries
+      fire correctly and the layout scales naturally.
+      user-scalable=yes preserved for accessibility.
   -->
-
   <meta
     name="viewport"
-    content="width=980, initial-scale=1, user-scalable=yes"
+    content="width=device-width, initial-scale=1, user-scalable=yes"
   >
 
   <title>
@@ -134,8 +123,6 @@
             P & A
           </h2>
 
-          
-
         </div>
 
       </div>
@@ -238,16 +225,12 @@
 
         <div class="hero-buttons">
 
-          
-
           <a
             href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Prisha's+Wedding&dates=20261208T070000/20261208T120000&details=Join+us+for+Prisha+and+Ankit's+Royal+Wedding+Celebration&location=JMD+Resort,+Mandu,+Madhya+Pradesh"
             target="_blank"
             class="reminder-btn"
           >
-
             Set Reminder
-
           </a>
 
         </div>
@@ -542,78 +525,68 @@
 
     </section>
 
-<!-- =========================================================
-     DRESS CODE GALLERY
-========================================================= -->
+    <!-- =========================================================
+         DRESS CODE GALLERY
+    ========================================================== -->
 
-<section class="dresscode-section">
+    <section class="dresscode-section">
 
-  <div class="section-top">
+      <div class="section-top">
 
-    <p class="section-tag">
-      Wedding Aesthetics
-    </p>
+        <p class="section-tag">
+          Wedding Aesthetics
+        </p>
 
-    
+        <p class="dress-text">
+          We would be delighted if your outfit
+          complements the royal wedding palette.
+        </p>
 
-    <p class="dress-text">
-      We would be delighted if your outfit
-      complements the royal wedding palette.
-    </p>
-
-  </div>
-
-  <div class="dress-slider">
-
-    <div class="dress-track">
-
-      <!-- 8 IMAGES -->
-
-      <div class="dress-slide">
-        <img src="assets/images/dress1.jpg" alt="">
       </div>
 
-      <div class="dress-slide">
-        <img src="assets/images/dress2.jpg" alt="">
+      <div class="dress-slider">
+
+        <div class="dress-track">
+
+          <div class="dress-slide">
+            <img src="assets/images/dress1.jpg" alt="">
+          </div>
+
+          <div class="dress-slide">
+            <img src="assets/images/dress2.jpg" alt="">
+          </div>
+
+          <div class="dress-slide">
+            <img src="assets/images/dress3.jpg" alt="">
+          </div>
+
+          <div class="dress-slide">
+            <img src="assets/images/dress4.jpg" alt="">
+          </div>
+
+          <div class="dress-slide">
+            <img src="assets/images/dress5.jpg" alt="">
+          </div>
+
+          <div class="dress-slide">
+            <img src="assets/images/dress6.jpg" alt="">
+          </div>
+
+          <div class="dress-slide">
+            <img src="assets/images/dress7.jpg" alt="">
+          </div>
+
+          <div class="dress-slide">
+            <img src="assets/images/dress8.jpg" alt="">
+          </div>
+
+        </div>
+
       </div>
 
-      <div class="dress-slide">
-        <img src="assets/images/dress3.jpg" alt="">
-      </div>
+      <div class="palette-wrapper"></div>
 
-      <div class="dress-slide">
-        <img src="assets/images/dress4.jpg" alt="">
-      </div>
-
-      <div class="dress-slide">
-        <img src="assets/images/dress5.jpg" alt="">
-      </div>
-
-      <div class="dress-slide">
-        <img src="assets/images/dress6.jpg" alt="">
-      </div>
-
-      <div class="dress-slide">
-        <img src="assets/images/dress7.jpg" alt="">
-      </div>
-
-      <div class="dress-slide">
-        <img src="assets/images/dress8.jpg" alt="">
-      </div>
-
-    </div>
-
-  </div>
-
-  <!-- COLOR PALETTE -->
-
-  <div class="palette-wrapper">
-
-
-
-  </div>
-
-</section>
+    </section>
 
     <!-- =========================================================
          VENUE SECTION
@@ -659,9 +632,7 @@
             target="_blank"
             class="venue-btn"
           >
-
             Open In Google Maps
-
           </a>
 
         </div>
@@ -690,10 +661,8 @@
         </h2>
 
         <p class="rsvp-text">
-
           Kindly confirm your gracious presence
           and bless us with your love and wishes.
-
         </p>
 
         <button
@@ -795,65 +764,63 @@
   </main>
 
   <!-- =========================================================
-     RSVP MODAL
-========================================================= -->
+       RSVP MODAL
+  ========================================================== -->
 
-<div
-  class="rsvp-modal"
-  id="rsvpModal"
->
+  <div
+    class="rsvp-modal"
+    id="rsvpModal"
+  >
 
-  <div class="modal-box">
+    <div class="modal-box">
 
-    <button
-      class="close-btn"
-      id="closeRSVP"
-    >
-      ×
-    </button>
-
-    <p class="section-tag">
-      Wedding RSVP
-    </p>
-
-    <h2 class="modal-title">
-      Confirm Attendance
-    </h2>
-
-    <form id="rsvpForm">
-
-      <input
-        type="text"
-        id="guestName"
-        placeholder="Your Name"
-        required
+      <button
+        class="close-btn"
+        id="closeRSVP"
       >
-
-      <input
-        type="number"
-        id="guestCount"
-        placeholder="Number Of Guests"
-        required
-      >
-
-      <textarea
-        id="guestMessage"
-        placeholder="Blessings & Wishes"
-      ></textarea>
-
-      <button type="submit">
-        Submit RSVP
+        ×
       </button>
 
-      <!-- SUCCESS MESSAGE -->
+      <p class="section-tag">
+        Wedding RSVP
+      </p>
 
-      <p id="rsvpSuccessMessage"></p>
+      <h2 class="modal-title">
+        Confirm Attendance
+      </h2>
 
-    </form>
+      <form id="rsvpForm">
+
+        <input
+          type="text"
+          id="guestName"
+          placeholder="Your Name"
+          required
+        >
+
+        <input
+          type="number"
+          id="guestCount"
+          placeholder="Number Of Guests"
+          required
+        >
+
+        <textarea
+          id="guestMessage"
+          placeholder="Blessings & Wishes"
+        ></textarea>
+
+        <button type="submit">
+          Submit RSVP
+        </button>
+
+        <p id="rsvpSuccessMessage"></p>
+
+      </form>
+
+    </div>
 
   </div>
-
-</div>
 
   <!-- AOS -->
 
