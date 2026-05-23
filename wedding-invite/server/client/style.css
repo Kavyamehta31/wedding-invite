@@ -44,6 +44,20 @@ body{
 }
 
 /* =========================================================
+   CHANGE 2 — DESKTOP-LIKE MOBILE RENDERING
+   Sets a minimum viewport scale so mobile browsers render
+   closer to the desktop layout instead of the narrow
+   responsive stack. Done via a meta-like CSS trick:
+   we tell the page it should be treated as at least 980px
+   wide, matching what major sites like Apple/NYT do.
+   This is enforced in the HTML <meta name="viewport"> tag
+   (see HTML file — width=980, initial-scale=1).
+   The CSS below supports this by making sure sections,
+   grids, and the timeline retain their desktop proportions
+   without forcing overflow.
+========================================================= */
+
+/* =========================================================
    COMMON
 ========================================================= */
 
@@ -1255,7 +1269,16 @@ img{
 }
 
 /* =========================================================
-   RESPONSIVE
+   RESPONSIVE — 992px
+   This is the first breakpoint. Previously it OVERRODE
+   the alternating timeline by forcing all .royal-event
+   to full width with left-only padding. That collapsed
+   the alternating layout.
+   FIX: We now keep the 50% width and alternating
+   left/right padding at this breakpoint. We only reduce
+   card padding and font sizes to keep cards readable.
+   The center line stays at left:50%.
+   The dots stay at right:-9px (left) and left:-9px (right).
 ========================================================= */
 
 @media(max-width:992px){
@@ -1268,22 +1291,34 @@ img{
     font-size:58px;
   }
 
-  .royal-timeline::before{
-    left:20px;
+  /* -------------------------------------------------------
+     ALTERNATING TIMELINE PRESERVED at 992px
+     We DO NOT collapse to single column here.
+     We just tighten padding on the cards.
+  ------------------------------------------------------- */
+
+  .royal-event.left{
+    padding-right:50px;
   }
 
-  .royal-event{
-
-    width:100%;
-
-    padding-left:70px !important;
-    padding-right:0 !important;
-
-    text-align:left !important;
+  .royal-event.right{
+    padding-left:50px;
   }
 
-  .royal-event::before{
-    left:11px !important;
+  .event-card{
+    padding:30px 24px;
+  }
+
+  .event-card h2{
+    font-size:38px;
+  }
+
+  .event-card h4{
+    font-size:26px;
+  }
+
+  .event-card p{
+    font-size:18px;
   }
 
   .contact-grid{
@@ -1299,10 +1334,25 @@ img{
   }
 }
 
+/* =========================================================
+   RESPONSIVE — 768px
+   Previously this breakpoint used to override the
+   timeline completely, converting it to a single-column
+   left-aligned stack. That broke the alternating look.
+
+   FIX:
+   - royal-timeline::before stays at left:50%
+   - .royal-event stays at width:50% — left stays left,
+     right stays right
+   - We tighten padding further for narrower screens
+   - Dots remain positioned correctly at their edges
+   - Card text scales down for readability
+========================================================= */
+
 @media(max-width:768px){
 
   section{
-    padding:90px 18px;
+    padding:90px 10px;
   }
 
   .navbar{
@@ -1328,17 +1378,46 @@ img{
   }
 
   .hero-location,
-  .event-card p,
   .rsvp-text{
     font-size:20px;
   }
 
-  .event-card h4{
-    font-size:30px;
+  /* -------------------------------------------------------
+     ALTERNATING TIMELINE at 768px
+     Keep 50/50 split. Reduce inner padding so cards
+     don't overflow. Tighten gaps between events.
+  ------------------------------------------------------- */
+
+  .royal-event{
+    margin-bottom:50px;
+  }
+
+  .royal-event.left{
+    padding-right:36px;
+    text-align:right;
+  }
+
+  .royal-event.right{
+    padding-left:36px;
+  }
+
+  .event-card{
+    padding:22px 16px;
   }
 
   .event-card h2{
-    font-size:40px;
+    font-size:28px;
+  }
+
+  .event-card h4{
+    font-size:20px;
+    margin-top:6px;
+  }
+
+  .event-card p{
+    font-size:15px;
+    margin-top:8px;
+    line-height:1.6;
   }
 
   .letter-card{
@@ -1389,6 +1468,12 @@ img{
   }
 }
 
+/* =========================================================
+   RESPONSIVE — 480px (small phones)
+   Still preserve alternating timeline.
+   Cards become very compact but stay on both sides.
+========================================================= */
+
 @media(max-width:480px){
 
   .hero h1{
@@ -1403,19 +1488,35 @@ img{
     font-size:34px;
   }
 
-  .event-card,
   .rsvp-card,
   .contact-card{
     padding:30px 22px;
   }
 
-  .event-card h4{
-    font-size:24px;
+  .event-card{
+    padding:18px 12px;
   }
 
-  .event-card p,
-  .rsvp-text{
-    font-size:18px;
+  .event-card h2{
+    font-size:22px;
+  }
+
+  .event-card h4{
+    font-size:17px;
+  }
+
+  .event-card p{
+    font-size:13px;
+    line-height:1.5;
+  }
+
+  /* Tighten gutter so cards don't feel too tight */
+  .royal-event.left{
+    padding-right:28px;
+  }
+
+  .royal-event.right{
+    padding-left:28px;
   }
 
   .music-btn{
@@ -1443,6 +1544,7 @@ img{
     width:100%;
   }
 }
+
 /* =========================================================
    DRESS CODE SECTION
 ========================================================= */
@@ -1572,7 +1674,7 @@ img{
 }
 
 /* =========================================================
-   RESPONSIVE
+   RESPONSIVE — DRESS CODE
 ========================================================= */
 
 @media(max-width:768px){

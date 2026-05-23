@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,9 +5,32 @@
 
   <meta charset="UTF-8">
 
+  <!--
+    CHANGE 2 — DESKTOP-LIKE MOBILE RENDERING
+    ===========================================
+    Original tag was:
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    That told mobile browsers to use the phone's actual
+    narrow pixel width (e.g. 390px on iPhone 14), which
+    triggered the narrow responsive breakpoints and
+    made everything stack vertically.
+
+    New tag sets width=980. This forces the browser to
+    render the page as if the viewport is 980px wide —
+    exactly what Apple, NYT, and many luxury/editorial
+    sites use for "desktop-first" mobile rendering.
+    The browser then scales the 980px layout to fit the
+    screen, giving a zoomed-out desktop feel instead of
+    a narrow stacked mobile feel.
+
+    initial-scale=1 keeps it from auto-zooming weirdly.
+    user-scalable=yes allows pinch-to-zoom for usability.
+  -->
+
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0"
+    content="width=980, initial-scale=1, user-scalable=yes"
   >
 
   <title>
@@ -519,6 +541,7 @@
       </div>
 
     </section>
+
 <!-- =========================================================
      DRESS CODE GALLERY
 ========================================================= -->
@@ -591,6 +614,7 @@
   </div>
 
 </section>
+
     <!-- =========================================================
          VENUE SECTION
     ========================================================== -->
