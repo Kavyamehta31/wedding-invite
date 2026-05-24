@@ -208,6 +208,52 @@ if (musicBtn && music) {
 }
 
 /* =========================================================
+   AUTO PAUSE / RESUME MUSIC
+========================================================= */
+
+document.addEventListener(
+
+  'visibilitychange',
+
+  async () => {
+
+    if (!music) return;
+
+    if (document.hidden) {
+
+      if (isPlaying) {
+
+        music.pause();
+
+      }
+
+    }
+
+    else {
+
+      if (isPlaying) {
+
+        try {
+
+          await music.play();
+
+        }
+
+        catch (error) {
+
+          console.log(error);
+
+        }
+
+      }
+
+    }
+
+  }
+
+);
+
+/* =========================================================
    HERO ANIMATION
 ========================================================= */
 
@@ -329,16 +375,17 @@ popCards.forEach((card) => {
 });
 
 /* =========================================================
-   SCRATCH EFFECT
+   SCRATCH EFFECT (SMOOTH MOBILE VERSION)
 ========================================================= */
 
 if (scratchOverlay) {
 
-  let scratchedPoints =
-    0;
+  let scratchedPoints = 0;
+  let isScratching = false;
+  let rafId = null;
 
-  let isScratching =
-    false;
+  scratchOverlay.style.touchAction =
+    'none';
 
   function createScratch(x, y) {
 
@@ -349,34 +396,37 @@ if (scratchOverlay) {
       'absolute';
 
     scratch.style.width =
-      '65px';
+      '55px';
 
     scratch.style.height =
-      '65px';
+      '55px';
 
     scratch.style.borderRadius =
       '50%';
 
     scratch.style.left =
-      `${x - 32}px`;
+      `${x - 27}px`;
 
     scratch.style.top =
-      `${y - 32}px`;
+      `${y - 27}px`;
 
     scratch.style.background =
       'rgba(0,0,0,1)';
 
+    scratch.style.pointerEvents =
+      'none';
+
     scratch.style.mixBlendMode =
       'destination-out';
 
-    scratch.style.pointerEvents =
-      'none';
+    scratch.style.willChange =
+      'transform';
 
     scratchOverlay.appendChild(scratch);
 
     scratchedPoints++;
 
-    if (scratchedPoints > 45) {
+    if (scratchedPoints > 40) {
 
       scratchOverlay.classList.add(
         'revealed'
@@ -386,18 +436,10 @@ if (scratchOverlay) {
 
   }
 
-  function handleScratch(e) {
-
-    if (!isScratching) return;
+  function handleScratch(clientX, clientY) {
 
     const rect =
       scratchOverlay.getBoundingClientRect();
-
-    const clientX =
-      e.clientX || e.touches[0].clientX;
-
-    const clientY =
-      e.clientY || e.touches[0].clientY;
 
     const x =
       clientX - rect.left;
@@ -405,9 +447,22 @@ if (scratchOverlay) {
     const y =
       clientY - rect.top;
 
-    createScratch(x, y);
+    if (rafId) return;
+
+    rafId =
+      requestAnimationFrame(() => {
+
+        createScratch(x, y);
+
+        rafId = null;
+
+      });
 
   }
+
+  /* =========================
+     MOUSE EVENTS
+  ========================= */
 
   scratchOverlay.addEventListener(
 
@@ -415,21 +470,19 @@ if (scratchOverlay) {
 
     () => {
 
-      isScratching =
-        true;
+      isScratching = true;
 
     }
 
   );
 
-  scratchOverlay.addEventListener(
+  window.addEventListener(
 
     'mouseup',
 
     () => {
 
-      isScratching =
-        false;
+      isScratching = false;
 
     }
 
@@ -441,28 +494,46 @@ if (scratchOverlay) {
 
     () => {
 
-      isScratching =
-        false;
+      isScratching = false;
 
     }
 
   );
 
   scratchOverlay.addEventListener(
+
     'mousemove',
-    handleScratch
+
+    (e) => {
+
+      if (!isScratching) return;
+
+      handleScratch(
+        e.clientX,
+        e.clientY
+      );
+
+    }
+
   );
+
+  /* =========================
+     TOUCH EVENTS
+  ========================= */
 
   scratchOverlay.addEventListener(
 
     'touchstart',
 
-    () => {
+    (e) => {
 
-      isScratching =
-        true;
+      isScratching = true;
 
-    }
+      e.preventDefault();
+
+    },
+
+    { passive: false }
 
   );
 
@@ -472,16 +543,46 @@ if (scratchOverlay) {
 
     () => {
 
-      isScratching =
-        false;
+      isScratching = false;
 
     }
 
   );
 
   scratchOverlay.addEventListener(
+
+    'touchcancel',
+
+    () => {
+
+      isScratching = false;
+
+    }
+
+  );
+
+  scratchOverlay.addEventListener(
+
     'touchmove',
-    handleScratch
+
+    (e) => {
+
+      if (!isScratching) return;
+
+      e.preventDefault();
+
+      const touch =
+        e.touches[0];
+
+      handleScratch(
+        touch.clientX,
+        touch.clientY
+      );
+
+    },
+
+    { passive: false }
+
   );
 
 }
@@ -612,8 +713,6 @@ if (rsvpForm) {
         const data =
           await response.json();
 
-        console.log(data);
-
         if (data.success) {
 
           const successMessage =
@@ -651,16 +750,10 @@ if (rsvpForm) {
 
         else {
 
-          const successMessage =
-            document.getElementById(
-              'rsvpSuccessMessage'
-            );
-
-          successMessage.innerHTML =
+          document.getElementById(
+            'rsvpSuccessMessage'
+          ).innerHTML =
             'Failed To Submit RSVP';
-
-          successMessage.style.color =
-            'red';
 
         }
 
@@ -670,16 +763,10 @@ if (rsvpForm) {
 
         console.log(error);
 
-        const successMessage =
-          document.getElementById(
-            'rsvpSuccessMessage'
-          );
-
-        successMessage.innerHTML =
+        document.getElementById(
+          'rsvpSuccessMessage'
+        ).innerHTML =
           'Server Error';
-
-        successMessage.style.color =
-          'red';
 
       }
 

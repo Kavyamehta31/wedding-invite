@@ -484,6 +484,11 @@ img{
   align-items:center;
   cursor:pointer;
   color:white;
+  touch-action: none;
+overscroll-behavior: contain;
+-webkit-user-select: none;
+user-select: none;
+-webkit-touch-callout: none;
   font-size:32px;
   letter-spacing:4px;
   background:
