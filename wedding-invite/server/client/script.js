@@ -911,3 +911,157 @@ console.log(
   'font-size:20px;color:#f4c89c;font-weight:bold;'
 
 );
+/* =========================================================
+   DRAGGABLE AUTO PHOTO SLIDER
+========================================================= */
+
+const dressSlider =
+  document.querySelector('.dress-slider');
+
+const dressTrack =
+  document.querySelector('.dress-track');
+
+if (dressSlider && dressTrack) {
+
+  let isDragging = false;
+
+  let startX = 0;
+
+  let scrollStart = 0;
+
+  /* =========================
+     PAUSE ON TOUCH / DRAG
+  ========================= */
+
+  function pauseSlider() {
+
+    dressTrack.style.animationPlayState =
+      'paused';
+
+  }
+
+  function resumeSlider() {
+
+    dressTrack.style.animationPlayState =
+      'running';
+
+  }
+
+  /* =========================
+     MOUSE EVENTS
+  ========================= */
+
+  dressSlider.addEventListener(
+
+    'mousedown',
+
+    (e) => {
+
+      isDragging = true;
+
+      startX = e.pageX;
+
+      scrollStart =
+        dressSlider.scrollLeft;
+
+      pauseSlider();
+
+    }
+
+  );
+
+  window.addEventListener(
+
+    'mouseup',
+
+    () => {
+
+      isDragging = false;
+
+      resumeSlider();
+
+    }
+
+  );
+
+  dressSlider.addEventListener(
+
+    'mousemove',
+
+    (e) => {
+
+      if (!isDragging) return;
+
+      e.preventDefault();
+
+      const walk =
+        (e.pageX - startX) * 1.8;
+
+      dressSlider.scrollLeft =
+        scrollStart - walk;
+
+    }
+
+  );
+
+  /* =========================
+     TOUCH EVENTS
+  ========================= */
+
+  dressSlider.addEventListener(
+
+    'touchstart',
+
+    (e) => {
+
+      isDragging = true;
+
+      startX =
+        e.touches[0].pageX;
+
+      scrollStart =
+        dressSlider.scrollLeft;
+
+      pauseSlider();
+
+    },
+
+    { passive:true }
+
+  );
+
+  dressSlider.addEventListener(
+
+    'touchend',
+
+    () => {
+
+      isDragging = false;
+
+      resumeSlider();
+
+    }
+
+  );
+
+  dressSlider.addEventListener(
+
+    'touchmove',
+
+    (e) => {
+
+      if (!isDragging) return;
+
+      const walk =
+        (e.touches[0].pageX - startX) * 1.8;
+
+      dressSlider.scrollLeft =
+        scrollStart - walk;
+
+    },
+
+    { passive:true }
+
+  );
+
+}
