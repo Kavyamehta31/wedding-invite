@@ -998,7 +998,7 @@ console.log(
 
 );
 /* =========================================================
-   DRAGGABLE AUTO PHOTO SLIDER
+   ULTRA SMOOTH INFINITE MOBILE SLIDER
 ========================================================= */
 
 const dressSlider =
@@ -1009,86 +1009,150 @@ const dressTrack =
 
 if (dressSlider && dressTrack) {
 
-  let isDragging = false;
+  let currentX = 0;
 
   let startX = 0;
 
-  let scrollStart = 0;
+  let isDragging = false;
+
+  let velocity = 0;
+
+  let momentum;
+
+  const autoSpeed = 0.45;
 
   /* =========================
-     PAUSE ON TOUCH / DRAG
+     GPU ACCELERATION
   ========================= */
 
-  function pauseSlider() {
+  dressTrack.style.willChange =
+    'transform';
 
-    dressTrack.style.animationPlayState =
-      'paused';
+  dressTrack.style.transform =
+    'translate3d(0,0,0)';
+
+  /* =========================
+     AUTO ANIMATION
+  ========================= */
+
+  function animate() {
+
+    if (!isDragging) {
+
+      currentX -= autoSpeed;
+
+      const halfWidth =
+        dressTrack.scrollWidth / 2;
+
+      if (
+        Math.abs(currentX)
+        >= halfWidth
+      ) {
+
+        currentX = 0;
+
+      }
+
+      dressTrack.style.transform =
+        `translate3d(${currentX}px,0,0)`;
+
+    }
+
+    requestAnimationFrame(
+      animate
+    );
 
   }
 
-  function resumeSlider() {
+  animate();
 
-    dressTrack.style.animationPlayState =
-      'running';
+  /* =========================
+     START DRAG
+  ========================= */
+
+  function startDrag(x) {
+
+    isDragging = true;
+
+    startX = x;
+
+    velocity = 0;
+
+    cancelAnimationFrame(momentum);
 
   }
 
   /* =========================
-     MOUSE EVENTS
+     DRAGGING
   ========================= */
 
-  dressSlider.addEventListener(
+  function drag(x) {
 
-    'mousedown',
+    if (!isDragging) return;
 
-    (e) => {
+    const delta =
+      x - startX;
 
-      isDragging = true;
+    startX = x;
 
-      startX = e.pageX;
+    currentX += delta;
 
-      scrollStart =
-        dressSlider.scrollLeft;
+    velocity = delta;
 
-      pauseSlider();
+    dressTrack.style.transform =
+      `translate3d(${currentX}px,0,0)`;
 
-    }
+  }
 
-  );
+  /* =========================
+     MOMENTUM EFFECT
+  ========================= */
 
-  window.addEventListener(
+  function applyMomentum() {
 
-    'mouseup',
+    velocity *= 0.95;
 
-    () => {
+    currentX += velocity;
 
-      isDragging = false;
+    const halfWidth =
+      dressTrack.scrollWidth / 2;
 
-      resumeSlider();
+    if (
+      Math.abs(currentX)
+      >= halfWidth
+    ) {
 
-    }
-
-  );
-
-  dressSlider.addEventListener(
-
-    'mousemove',
-
-    (e) => {
-
-      if (!isDragging) return;
-
-      e.preventDefault();
-
-      const walk =
-        (e.pageX - startX) * 1.8;
-
-      dressSlider.scrollLeft =
-        scrollStart - walk;
+      currentX = 0;
 
     }
 
-  );
+    dressTrack.style.transform =
+      `translate3d(${currentX}px,0,0)`;
+
+    if (
+      Math.abs(velocity) > 0.3
+    ) {
+
+      momentum =
+        requestAnimationFrame(
+          applyMomentum
+        );
+
+    }
+
+  }
+
+  /* =========================
+     END DRAG
+  ========================= */
+
+  function endDrag() {
+
+    isDragging = false;
+
+    applyMomentum();
+
+  }
 
   /* =========================
      TOUCH EVENTS
@@ -1100,15 +1164,25 @@ if (dressSlider && dressTrack) {
 
     (e) => {
 
-      isDragging = true;
+      startDrag(
+        e.touches[0].clientX
+      );
 
-      startX =
-        e.touches[0].pageX;
+    },
 
-      scrollStart =
-        dressSlider.scrollLeft;
+    { passive:true }
 
-      pauseSlider();
+  );
+
+  dressSlider.addEventListener(
+
+    'touchmove',
+
+    (e) => {
+
+      drag(
+        e.touches[0].clientX
+      );
 
     },
 
@@ -1122,31 +1196,49 @@ if (dressSlider && dressTrack) {
 
     () => {
 
-      isDragging = false;
-
-      resumeSlider();
+      endDrag();
 
     }
 
   );
 
+  /* =========================
+     MOUSE EVENTS
+  ========================= */
+
   dressSlider.addEventListener(
 
-    'touchmove',
+    'mousedown',
 
     (e) => {
 
-      if (!isDragging) return;
+      startDrag(e.clientX);
 
-      const walk =
-        (e.touches[0].pageX - startX) * 1.8;
+    }
 
-      dressSlider.scrollLeft =
-        scrollStart - walk;
+  );
 
-    },
+  window.addEventListener(
 
-    { passive:true }
+    'mousemove',
+
+    (e) => {
+
+      drag(e.clientX);
+
+    }
+
+  );
+
+  window.addEventListener(
+
+    'mouseup',
+
+    () => {
+
+      endDrag();
+
+    }
 
   );
 
