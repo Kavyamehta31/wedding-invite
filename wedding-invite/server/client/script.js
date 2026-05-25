@@ -654,10 +654,12 @@ function closeModal() {
 }
 
 /* =========================================================
-   RSVP FORM SUBMIT
+  RSVP FORM SUBMIT (NO DUPLICATE SUBMISSIONS)
 ========================================================= */
 
 if (rsvpForm) {
+
+  let isSubmitting = false;
 
   rsvpForm.addEventListener(
 
@@ -666,6 +668,41 @@ if (rsvpForm) {
     async (e) => {
 
       e.preventDefault();
+
+      /* =========================
+         PREVENT DOUBLE CLICK
+      ========================= */
+
+      if (isSubmitting) return;
+
+      isSubmitting = true;
+
+      const submitBtn =
+        rsvpForm.querySelector(
+          'button[type="submit"]'
+        );
+
+      const successMessage =
+        document.getElementById(
+          'rsvpSuccessMessage'
+        );
+
+      /* =========================
+         BUTTON LOADING STATE
+      ========================= */
+
+      submitBtn.disabled = true;
+
+      submitBtn.innerHTML =
+        'Submitting...';
+
+      submitBtn.style.opacity =
+        '0.7';
+
+      submitBtn.style.cursor =
+        'not-allowed';
+
+      successMessage.innerHTML = '';
 
       const name =
         document.getElementById(
@@ -687,7 +724,7 @@ if (rsvpForm) {
         const response =
           await fetch(
 
-            'https://wedding-invite-e9tn.onrender.com/rsvp',
+            'https://groom-wedding-website.onrender.com/rsvp',
 
             {
 
@@ -713,12 +750,13 @@ if (rsvpForm) {
         const data =
           await response.json();
 
-        if (data.success) {
+        console.log(data);
 
-          const successMessage =
-            document.getElementById(
-              'rsvpSuccessMessage'
-            );
+        /* =========================
+           SUCCESS
+        ========================= */
+
+        if (data.success) {
 
           successMessage.innerHTML =
             '✨ Thank You! Your RSVP Has Been Submitted Successfully ✨';
@@ -737,6 +775,12 @@ if (rsvpForm) {
 
           rsvpForm.reset();
 
+          submitBtn.innerHTML =
+            'Submitted ✓';
+
+          submitBtn.style.opacity =
+            '1';
+
           setTimeout(() => {
 
             successMessage.innerHTML =
@@ -744,16 +788,35 @@ if (rsvpForm) {
 
             closeModal();
 
+            /* RESET BUTTON */
+
+            submitBtn.disabled = false;
+
+            submitBtn.innerHTML =
+              'Submit RSVP';
+
+            submitBtn.style.cursor =
+              'pointer';
+
+            isSubmitting = false;
+
           }, 2500);
 
         }
 
+        /* =========================
+           FAILED
+        ========================= */
+
         else {
 
-          document.getElementById(
-            'rsvpSuccessMessage'
-          ).innerHTML =
+          successMessage.innerHTML =
             'Failed To Submit RSVP';
+
+          successMessage.style.color =
+            'red';
+
+          resetSubmitButton();
 
         }
 
@@ -763,10 +826,34 @@ if (rsvpForm) {
 
         console.log(error);
 
-        document.getElementById(
-          'rsvpSuccessMessage'
-        ).innerHTML =
+        successMessage.innerHTML =
           'Server Error';
+
+        successMessage.style.color =
+          'red';
+
+        resetSubmitButton();
+
+      }
+
+      /* =========================
+         RESET BUTTON FUNCTION
+      ========================= */
+
+      function resetSubmitButton() {
+
+        submitBtn.disabled = false;
+
+        submitBtn.innerHTML =
+          'Submit RSVP';
+
+        submitBtn.style.opacity =
+          '1';
+
+        submitBtn.style.cursor =
+          'pointer';
+
+        isSubmitting = false;
 
       }
 
@@ -775,7 +862,6 @@ if (rsvpForm) {
   );
 
 }
-
 /* =========================================================
    ACTIVE NAVBAR LINK
 ========================================================= */
