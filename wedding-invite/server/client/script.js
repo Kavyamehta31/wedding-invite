@@ -1242,4 +1242,4 @@ if (dressSlider && dressTrack) {
 
   );
 
-}
+} 
