@@ -724,7 +724,7 @@ if (rsvpForm) {
         const response =
           await fetch(
 
-            'https://groom-wedding-website.onrender.com/rsvp',
+            'https://wedding-invite-e9tn.onrender.com/rsvp',
 
             {
 
