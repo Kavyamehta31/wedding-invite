@@ -929,7 +929,7 @@ user-select: none;
   width:max-content;
 
   animation:
-    scrollGallery 45s linear infinite;
+    scrollGallery 35s linear infinite;
 
   will-change:transform;
 }
@@ -965,12 +965,12 @@ user-select: none;
 
 @keyframes scrollGallery{
 
-  0%{
+  from{
     transform:translateX(0);
   }
 
-  100%{
-    transform:translateX(-50%);
+  to{
+    transform:translateX(calc(-50% - 12.5px));
   }
 
 }
