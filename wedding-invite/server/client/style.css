@@ -1623,3 +1623,30 @@ user-select: none;
     font-size:24px;
   }
 }
+/* ==========================================
+   NAVKAR MANTRA ABOVE ENVELOPE
+========================================== */
+
+.navkar-mantra{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.navkar-mantra p{
+    margin:4px 0;
+    color:#f4c89c;
+    font-size:22px;
+    font-weight:700;
+    letter-spacing:1px;
+    text-shadow:
+        0 0 10px rgba(244,200,156,0.5),
+        0 0 20px rgba(244,200,156,0.3);
+}
+
+@media(max-width:768px){
+
+    .navkar-mantra p{
+        font-size:14px;
+    }
+
+}
