@@ -208,6 +208,52 @@ if (musicBtn && music) {
 }
 
 /* =========================================================
+   AUTO PAUSE / RESUME MUSIC
+========================================================= */
+
+document.addEventListener(
+
+  'visibilitychange',
+
+  async () => {
+
+    if (!music) return;
+
+    if (document.hidden) {
+
+      if (isPlaying) {
+
+        music.pause();
+
+      }
+
+    }
+
+    else {
+
+      if (isPlaying) {
+
+        try {
+
+          await music.play();
+
+        }
+
+        catch (error) {
+
+          console.log(error);
+
+        }
+
+      }
+
+    }
+
+  }
+
+);
+
+/* =========================================================
    HERO ANIMATION
 ========================================================= */
 
@@ -329,16 +375,17 @@ popCards.forEach((card) => {
 });
 
 /* =========================================================
-   SCRATCH EFFECT
+   SCRATCH EFFECT (SMOOTH MOBILE VERSION)
 ========================================================= */
 
 if (scratchOverlay) {
 
-  let scratchedPoints =
-    0;
+  let scratchedPoints = 0;
+  let isScratching = false;
+  let rafId = null;
 
-  let isScratching =
-    false;
+  scratchOverlay.style.touchAction =
+    'none';
 
   function createScratch(x, y) {
 
@@ -349,34 +396,37 @@ if (scratchOverlay) {
       'absolute';
 
     scratch.style.width =
-      '65px';
+      '55px';
 
     scratch.style.height =
-      '65px';
+      '55px';
 
     scratch.style.borderRadius =
       '50%';
 
     scratch.style.left =
-      `${x - 32}px`;
+      `${x - 27}px`;
 
     scratch.style.top =
-      `${y - 32}px`;
+      `${y - 27}px`;
 
     scratch.style.background =
       'rgba(0,0,0,1)';
 
+    scratch.style.pointerEvents =
+      'none';
+
     scratch.style.mixBlendMode =
       'destination-out';
 
-    scratch.style.pointerEvents =
-      'none';
+    scratch.style.willChange =
+      'transform';
 
     scratchOverlay.appendChild(scratch);
 
     scratchedPoints++;
 
-    if (scratchedPoints > 45) {
+    if (scratchedPoints > 40) {
 
       scratchOverlay.classList.add(
         'revealed'
@@ -386,18 +436,10 @@ if (scratchOverlay) {
 
   }
 
-  function handleScratch(e) {
-
-    if (!isScratching) return;
+  function handleScratch(clientX, clientY) {
 
     const rect =
       scratchOverlay.getBoundingClientRect();
-
-    const clientX =
-      e.clientX || e.touches[0].clientX;
-
-    const clientY =
-      e.clientY || e.touches[0].clientY;
 
     const x =
       clientX - rect.left;
@@ -405,9 +447,22 @@ if (scratchOverlay) {
     const y =
       clientY - rect.top;
 
-    createScratch(x, y);
+    if (rafId) return;
+
+    rafId =
+      requestAnimationFrame(() => {
+
+        createScratch(x, y);
+
+        rafId = null;
+
+      });
 
   }
+
+  /* =========================
+     MOUSE EVENTS
+  ========================= */
 
   scratchOverlay.addEventListener(
 
@@ -415,21 +470,19 @@ if (scratchOverlay) {
 
     () => {
 
-      isScratching =
-        true;
+      isScratching = true;
 
     }
 
   );
 
-  scratchOverlay.addEventListener(
+  window.addEventListener(
 
     'mouseup',
 
     () => {
 
-      isScratching =
-        false;
+      isScratching = false;
 
     }
 
@@ -441,28 +494,46 @@ if (scratchOverlay) {
 
     () => {
 
-      isScratching =
-        false;
+      isScratching = false;
 
     }
 
   );
 
   scratchOverlay.addEventListener(
+
     'mousemove',
-    handleScratch
+
+    (e) => {
+
+      if (!isScratching) return;
+
+      handleScratch(
+        e.clientX,
+        e.clientY
+      );
+
+    }
+
   );
+
+  /* =========================
+     TOUCH EVENTS
+  ========================= */
 
   scratchOverlay.addEventListener(
 
     'touchstart',
 
-    () => {
+    (e) => {
 
-      isScratching =
-        true;
+      isScratching = true;
 
-    }
+      e.preventDefault();
+
+    },
+
+    { passive: false }
 
   );
 
@@ -472,16 +543,46 @@ if (scratchOverlay) {
 
     () => {
 
-      isScratching =
-        false;
+      isScratching = false;
 
     }
 
   );
 
   scratchOverlay.addEventListener(
+
+    'touchcancel',
+
+    () => {
+
+      isScratching = false;
+
+    }
+
+  );
+
+  scratchOverlay.addEventListener(
+
     'touchmove',
-    handleScratch
+
+    (e) => {
+
+      if (!isScratching) return;
+
+      e.preventDefault();
+
+      const touch =
+        e.touches[0];
+
+      handleScratch(
+        touch.clientX,
+        touch.clientY
+      );
+
+    },
+
+    { passive: false }
+
   );
 
 }
@@ -553,10 +654,12 @@ function closeModal() {
 }
 
 /* =========================================================
-   RSVP FORM SUBMIT
+  RSVP FORM SUBMIT (NO DUPLICATE SUBMISSIONS)
 ========================================================= */
 
 if (rsvpForm) {
+
+  let isSubmitting = false;
 
   rsvpForm.addEventListener(
 
@@ -565,6 +668,41 @@ if (rsvpForm) {
     async (e) => {
 
       e.preventDefault();
+
+      /* =========================
+         PREVENT DOUBLE CLICK
+      ========================= */
+
+      if (isSubmitting) return;
+
+      isSubmitting = true;
+
+      const submitBtn =
+        rsvpForm.querySelector(
+          'button[type="submit"]'
+        );
+
+      const successMessage =
+        document.getElementById(
+          'rsvpSuccessMessage'
+        );
+
+      /* =========================
+         BUTTON LOADING STATE
+      ========================= */
+
+      submitBtn.disabled = true;
+
+      submitBtn.innerHTML =
+        'Submitting...';
+
+      submitBtn.style.opacity =
+        '0.7';
+
+      submitBtn.style.cursor =
+        'not-allowed';
+
+      successMessage.innerHTML = '';
 
       const name =
         document.getElementById(
@@ -583,103 +721,106 @@ if (rsvpForm) {
 
       try {
 
-        const response =
-          await fetch(
+  const formData = new FormData();
 
-            'http://localhost:5000/rsvp',
+  formData.append("name", name);
+  formData.append("guests", guests);
+  formData.append("message", message);
 
-            {
+  const response = await fetch(
+    "https://script.google.com/macros/s/AKfycbxFyRgYcjVrrBhK94JudelqWi_BamH9IcEuTlh6od90dzV5DvtGyWoZ9ZwtiVM2FhYHOQ/exec",
+    {
+      method: "POST",
+      body: formData
+    }
+  );
 
-              method: 'POST',
+  const result = await response.text();
 
-              headers: {
-                'Content-Type':
-                  'application/json'
-              },
+  if (result === "success") {
 
-              body: JSON.stringify({
+    successMessage.innerHTML =
+      "✨ Thank You! Your RSVP Has Been Submitted Successfully ✨";
 
-                name,
-                guests,
-                message
+    successMessage.style.color =
+      "#f4c89c";
 
-              })
+    successMessage.style.marginTop =
+      "15px";
 
-            }
+    successMessage.style.fontSize =
+      "15px";
 
-          );
+    successMessage.style.textAlign =
+      "center";
 
-        const data =
-          await response.json();
+    rsvpForm.reset();
 
-        console.log(data);
+    submitBtn.innerHTML =
+      "Submitted ✓";
 
-        if (data.success) {
+    submitBtn.style.opacity =
+      "1";
 
-          const successMessage =
-            document.getElementById(
-              'rsvpSuccessMessage'
-            );
+    setTimeout(() => {
 
-          successMessage.innerHTML =
-            '✨ Thank You! Your RSVP Has Been Submitted Successfully ✨';
+      successMessage.innerHTML =
+        "";
 
-          successMessage.style.color =
-            '#f4c89c';
+      closeModal();
 
-          successMessage.style.marginTop =
-            '15px';
+      submitBtn.disabled = false;
 
-          successMessage.style.fontSize =
-            '15px';
+      submitBtn.innerHTML =
+        "Submit RSVP";
 
-          successMessage.style.textAlign =
-            'center';
+      submitBtn.style.cursor =
+        "pointer";
 
-          rsvpForm.reset();
+      isSubmitting = false;
 
-          setTimeout(() => {
+    }, 2500);
 
-            successMessage.innerHTML =
-              '';
+  } else {
 
-            closeModal();
+    throw new Error("Submission failed");
 
-          }, 2500);
+  }
 
-        }
-
-        else {
-
-          const successMessage =
-            document.getElementById(
-              'rsvpSuccessMessage'
-            );
-
-          successMessage.innerHTML =
-            'Failed To Submit RSVP';
-
-          successMessage.style.color =
-            'red';
-
-        }
-
-      }
+}
 
       catch (error) {
 
         console.log(error);
-
-        const successMessage =
-          document.getElementById(
-            'rsvpSuccessMessage'
-          );
 
         successMessage.innerHTML =
           'Server Error';
 
         successMessage.style.color =
           'red';
+
+        resetSubmitButton();
+
+      }
+
+      /* =========================
+         RESET BUTTON FUNCTION
+      ========================= */
+
+      function resetSubmitButton() {
+
+        submitBtn.disabled = false;
+
+        submitBtn.innerHTML =
+          'Submit RSVP';
+
+        submitBtn.style.opacity =
+          '1';
+
+        submitBtn.style.cursor =
+          'pointer';
+
+        isSubmitting = false;
 
       }
 
@@ -688,7 +829,6 @@ if (rsvpForm) {
   );
 
 }
-
 /* =========================================================
    ACTIVE NAVBAR LINK
 ========================================================= */
@@ -824,3 +964,249 @@ console.log(
   'font-size:20px;color:#f4c89c;font-weight:bold;'
 
 );
+/* =========================================================
+   ULTRA SMOOTH INFINITE MOBILE SLIDER
+========================================================= */
+
+const dressSlider =
+  document.querySelector('.dress-slider');
+
+const dressTrack =
+  document.querySelector('.dress-track');
+
+if (dressSlider && dressTrack) {
+
+  let currentX = 0;
+
+  let startX = 0;
+
+  let isDragging = false;
+
+  let velocity = 0;
+
+  let momentum;
+
+  const autoSpeed = 0.45;
+
+  /* =========================
+     GPU ACCELERATION
+  ========================= */
+
+  dressTrack.style.willChange =
+    'transform';
+
+  dressTrack.style.transform =
+    'translate3d(0,0,0)';
+
+  /* =========================
+     AUTO ANIMATION
+  ========================= */
+
+  function animate() {
+
+    if (!isDragging) {
+
+      currentX -= autoSpeed;
+
+      const halfWidth =
+        dressTrack.scrollWidth / 2;
+
+      if (
+        Math.abs(currentX)
+        >= halfWidth
+      ) {
+
+        currentX = 0;
+
+      }
+
+      dressTrack.style.transform =
+        `translate3d(${currentX}px,0,0)`;
+
+    }
+
+    requestAnimationFrame(
+      animate
+    );
+
+  }
+
+  animate();
+
+  /* =========================
+     START DRAG
+  ========================= */
+
+  function startDrag(x) {
+
+    isDragging = true;
+
+    startX = x;
+
+    velocity = 0;
+
+    cancelAnimationFrame(momentum);
+
+  }
+
+  /* =========================
+     DRAGGING
+  ========================= */
+
+  function drag(x) {
+
+    if (!isDragging) return;
+
+    const delta =
+      x - startX;
+
+    startX = x;
+
+    currentX += delta;
+
+    velocity = delta;
+
+    dressTrack.style.transform =
+      `translate3d(${currentX}px,0,0)`;
+
+  }
+
+  /* =========================
+     MOMENTUM EFFECT
+  ========================= */
+
+  function applyMomentum() {
+
+    velocity *= 0.95;
+
+    currentX += velocity;
+
+    const halfWidth =
+      dressTrack.scrollWidth / 2;
+
+    if (
+      Math.abs(currentX)
+      >= halfWidth
+    ) {
+
+      currentX = 0;
+
+    }
+
+    dressTrack.style.transform =
+      `translate3d(${currentX}px,0,0)`;
+
+    if (
+      Math.abs(velocity) > 0.3
+    ) {
+
+      momentum =
+        requestAnimationFrame(
+          applyMomentum
+        );
+
+    }
+
+  }
+
+  /* =========================
+     END DRAG
+  ========================= */
+
+  function endDrag() {
+
+    isDragging = false;
+
+    applyMomentum();
+
+  }
+
+  /* =========================
+     TOUCH EVENTS
+  ========================= */
+
+  dressSlider.addEventListener(
+
+    'touchstart',
+
+    (e) => {
+
+      startDrag(
+        e.touches[0].clientX
+      );
+
+    },
+
+    { passive:true }
+
+  );
+
+  dressSlider.addEventListener(
+
+    'touchmove',
+
+    (e) => {
+
+      drag(
+        e.touches[0].clientX
+      );
+
+    },
+
+    { passive:true }
+
+  );
+
+  dressSlider.addEventListener(
+
+    'touchend',
+
+    () => {
+
+      endDrag();
+
+    }
+
+  );
+
+  /* =========================
+     MOUSE EVENTS
+  ========================= */
+
+  dressSlider.addEventListener(
+
+    'mousedown',
+
+    (e) => {
+
+      startDrag(e.clientX);
+
+    }
+
+  );
+
+  window.addEventListener(
+
+    'mousemove',
+
+    (e) => {
+
+      drag(e.clientX);
+
+    }
+
+  );
+
+  window.addEventListener(
+
+    'mouseup',
+
+    () => {
+
+      endDrag();
+
+    }
+
+  );
+
+}
